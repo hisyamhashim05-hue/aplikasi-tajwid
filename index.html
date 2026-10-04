@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lexend:wght@400;500;600&display=swap">
+
 <style>
 :root {
   --bg: #F2F6F4;
@@ -65,17 +66,25 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
 .tab[aria-selected="true"] small { color: inherit; opacity: .85; }
 
 .panel { display: grid; gap: 16px; }
-.card { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 18px; min-width: 0; }
+.card { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 18px; min-width: 0; position: relative; }
 .stage { display: grid; justify-items: center; gap: 6px; text-align: center; }
-.big { font-size: clamp(7rem, 30vw, 12rem); line-height: 1.5; color: var(--fg); }
-.sound { font-size: 1.5rem; font-weight: 600; }
+.big { font-size: clamp(7rem, 30vw, 12rem); line-height: 1.5; color: var(--fg); transition: transform 0.2s ease; }
+.sound { font-size: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
 .sound span { color: var(--accent); }
+.sound-badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; font-size: 0.8rem;
+  border-radius: 20px; background: var(--accent-soft); color: var(--accent); opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.sound-badge.active { opacity: 1; animation: pulseBadge 1s infinite alternate; }
+@keyframes pulseBadge { 0% { transform: scale(0.96); } 100% { transform: scale(1.04); } }
+
 .hint { color: var(--muted); max-width: 46ch; margin: 0; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 .btn {
   font: inherit; font-weight: 500; cursor: pointer; border-radius: 10px; padding: 11px 18px;
   border: 1.5px solid var(--accent); background: var(--surface); color: var(--accent);
-  transition: all 0.2s ease;
+  transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px;
 }
 .btn.primary { background: var(--accent); color: var(--accent-fg); }
 .btn[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--accent-fg); }
@@ -100,7 +109,7 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
 
 .progress { height: 8px; border-radius: 99px; background: var(--accent-soft); overflow: hidden; }
 .progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s; }
-.qmeta { display: flex; justify-content: space-between; color: var(--muted); font-size: .9rem; }
+.qmeta { display: flex; justify-between: space-between; color: var(--muted); font-size: .9rem; }
 .prompt { font-size: clamp(1.15rem, 3.6vw, 1.5rem); font-weight: 500; text-align: center; margin: 6px 0; }
 .opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .opts.letters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -146,8 +155,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
 .infohead .where { font-size: 1.1rem; }
 .infohead .where b { color: var(--accent); }
 .info p { margin: 10px 0 0; }
-.same { display: inline-flex; gap: 8px; align-items: center; }
-.same .ar { font-size: 2rem; line-height: 1.4; }
 </style>
 </head>
 <body>
@@ -171,6 +178,7 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
 
   <section class="panel" id="s-belajar" role="tabpanel" aria-labelledby="t-belajar">
     <div class="card stage">
+      <div class="sound-badge" id="soundBadge">🔊 Sedang Membunyikan...</div>
       <div class="big ar" id="stageLetter" aria-live="polite"></div>
       <div class="sound" id="stageSound"></div>
       <p class="hint" id="stageHint"></p>
@@ -240,57 +248,165 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
 (function () {
   var FATHAH = 'َ';
   
-  // Data Sebutan Tepat & Dipanjangkan Mengikut Garis Panduan Tajwid (Alif Fathah diperbetulkan kepada أَ)
+  // Data Sebutan Tepat & Dipanjangkan Mengikut Garis Panduan Tajwid
   var L = [
     { 
       base0: 'ا', baseF: 'أ', name: 'alif', snd: 'a',
-      arNameLong: 'أَلِيفْ',       // Sebutan Nama Dipanjangkan: Aliff...
-      arFathahLong: 'أَ',          // Diubah kepada أ (Alif Fathah tunggal/jelas) untuk mengelakkan bunyi pelik teks panjang "آا"
+      arNameLong: 'أَلِيفْ',       
+      arFathahLong: 'أَ',          
       tip: 'Garis lurus, tiada titik. Tanpa fathah dibaca "Aliff". Dengan fathah dibaca "Aaa".'
     },
     { 
       base0: 'ب', baseF: 'ب', name: 'ba', snd: 'ba',
-      arNameLong: 'بَاءْ',          // Sebutan Nama Dipanjangkan: Baaa...
-      arFathahLong: 'بَا',          // Sebutan Baris Dipanjangkan: Baa...
+      arNameLong: 'بَاءْ',          
+      arFathahLong: 'بَا',          
       tip: 'Satu titik di bawah. Tanpa fathah dibaca "Baaa". Dengan fathah dibaca "Baa".'
     },
     { 
       base0: 'ت', baseF: 'ت', name: 'ta', snd: 'ta',
-      arNameLong: 'تَاءْ',          // Sebutan Nama Dipanjangkan: Taaa...
-      arFathahLong: 'تَا',          // Sebutan Baris Dipanjangkan: Taa...
+      arNameLong: 'تَاءْ',          
+      arFathahLong: 'تَا',          
       tip: 'Dua titik di atas. Tanpa fathah dibaca "Taaa". Dengan fathah dibaca "Taa".', dots: 2, pos: 'atas'
     },
     { 
       base0: 'ث', baseF: 'ث', name: 'tha', snd: 'tha',
-      arNameLong: 'ثَاءْ',          // Sebutan Nama Dipanjangkan: Thaaa...
-      arFathahLong: 'ثَا',          // Sebutan Baris Dipanjangkan: Thaa...
+      arNameLong: 'ثَاءْ',          
+      arFathahLong: 'ثَا',          
       tip: 'Tiga titik di atas. Tanpa fathah dibaca "Thaaa". Dengan fathah dibaca "Thaa".', dots: 3, pos: 'atas'
     },
     { 
       base0: 'ج', baseF: 'ج', name: 'jim', snd: 'ja',
-      arNameLong: 'جِيمْ',          // Sebutan Nama Dipanjangkan: Jiim...
-      arFathahLong: 'جَا',          // Sebutan Baris Dipanjangkan: Jaa...
+      arNameLong: 'جِيمْ',          
+      arFathahLong: 'جَا',          
       tip: 'Satu titik di bawah. Tanpa fathah dibaca "Jiim". Dengan fathah dibaca "Jaa".', dots: 1, pos: 'bawah'
     },
     { 
       base0: 'ح', baseF: 'ح', name: 'ha', snd: 'ha',
-      arNameLong: 'حَاءْ',          // Sebutan Nama Dipanjangkan: Haaa...
-      arFathahLong: 'حَا',          // Sebutan Baris Dipanjangkan: Haa...
+      arNameLong: 'حَاءْ',          
+      arFathahLong: 'حَا',          
       tip: 'Tiada titik. Tanpa fathah dibaca "Haaa". Dengan fathah dibaca "Haa".', dots: 0, pos: ''
     }
   ];
 
-  function F(i) { return L[i].baseF + FATHAH; }
   function arSpan(i) { return '<span class="ar">' + L[i].baseF + '<span class="mark">' + FATHAH + '</span></span>'; }
   function $(id) { return document.getElementById(id); }
 
-  // Enjin Sebutan Tepat & Seragam (Laptop + Telefon 100% Sama)
+  var audioCache = {};
+  var currentAudio = null;
   var arVoice = null;
+
+  function setBadgeState(active) {
+    var b = $('soundBadge');
+    if (b) {
+      if (active) b.classList.add('active');
+      else b.classList.remove('active');
+    }
+  }
+
+  function writeString(view, offset, string) {
+    for (var i = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  }
+
+  function pcmToWav(pcm16, sampleRate) {
+    var buffer = new ArrayBuffer(44 + pcm16.length * 2);
+    var view = new DataView(buffer);
+    writeString(view, 0, 'RIFF');
+    view.setUint32(4, 36 + pcm16.length * 2, true);
+    writeString(view, 8, 'WAVE');
+    writeString(view, 12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true); // PCM format
+    view.setUint16(22, 1, true); // Mono
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeString(view, 36, 'data');
+    view.setUint32(40, pcm16.length * 2, true);
+
+    var offset = 44;
+    for (var i = 0; i < pcm16.length; i++, offset += 2) {
+      view.setInt16(offset, pcm16[i], true);
+    }
+    return new Blob([buffer], { type: 'audio/wav' });
+  }
+
+  function base64ToArrayBuffer(base64) {
+    var binaryString = window.atob(base64);
+    var len = binaryString.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+
+  async function fetchGeminiTTS(textPrompt) {
+    if (audioCache[textPrompt]) return audioCache[textPrompt];
+
+    try {
+      var apiKey = "";
+      var apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=" + apiKey;
+
+      var payload = {
+        contents: [{
+          parts: [{ text: "Sebut huruf tajwid ini dengan sangat jelas dan fasih untuk murid sekolah rendah: " + textPrompt }]
+        }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: "Kore" }
+            }
+          }
+        }
+      };
+
+      var res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("HTTP " + res.status);
+
+      var data = await res.json();
+      var part = data?.candidates?.[0]?.content?.parts?.[0];
+      if (part && part.inlineData && part.inlineData.data) {
+        var mime = part.inlineData.mimeType || "audio/L16;rate=24000";
+        var rateMatch = mime.match(/rate=(\d+)/);
+        var sampleRate = rateMatch ? parseInt(rateMatch[1], 10) : 24000;
+        
+        var pcmBuffer = base64ToArrayBuffer(part.inlineData.data);
+        var pcm16 = new Int16Array(pcmBuffer);
+        var wavBlob = pcmToWav(pcm16, sampleRate);
+        var blobUrl = URL.createObjectURL(wavBlob);
+        audioCache[textPrompt] = blobUrl;
+        return blobUrl;
+      }
+    } catch (err) {
+      console.warn("Gemini TTS status:", err);
+    }
+    return null;
+  }
+
+  // Pre-load semua bunyi huruf dalam ingatan untuk tindak balas pantas
+  function preloadAudio() {
+    L.forEach(function(l) {
+      [l.arNameLong, l.arFathahLong].forEach(function(text) {
+        fetchGeminiTTS(text);
+      });
+    });
+  }
+
+  if (document.readyState === 'complete') { preloadAudio(); }
+  else { window.addEventListener('load', preloadAudio); }
 
   function loadVoices() {
     if (!('speechSynthesis' in window)) return;
     var voices = window.speechSynthesis.getVoices();
-    // Cari suara Arab khusus dalam sistem
     arVoice = voices.find(function(v) {
       return v.lang && (v.lang === 'ar-SA' || v.lang.startsWith('ar') || v.lang.includes('ar_'));
     }) || voices.find(function(v) {
@@ -305,61 +421,78 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
     }
   }
 
-  function playOnlineTTS(text, callback) {
-    try {
-      var url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=ar&client=tw-ob';
-      var audio = new Audio(url);
-      window.currentAudio = audio;
-      audio.playbackRate = 0.85;
-      audio.onended = function() { if (callback) callback(); };
-      audio.onerror = function() { if (callback) callback(); };
-      audio.play().catch(function() { if (callback) callback(); });
-    } catch(e) {
+  function fallbackSpeechSynthesis(text, callback) {
+    if (!('speechSynthesis' in window)) {
+      setBadgeState(false);
       if (callback) callback();
+      return;
+    }
+
+    // Bugfix penting untuk Windows Chrome: Batalkan queue tersumbat sebelum ini
+    window.speechSynthesis.cancel();
+
+    var u = new SpeechSynthesisUtterance(text);
+    loadVoices();
+    if (arVoice) u.voice = arVoice;
+    u.lang = 'ar-SA';
+    u.rate = 0.85;
+
+    var doneCalled = false;
+    function done() {
+      if (!doneCalled) {
+        doneCalled = true;
+        setBadgeState(false);
+        if (callback) callback();
+      }
+    }
+
+    u.onend = done;
+    u.onerror = done;
+    setTimeout(done, 2500); // Safety timeout
+
+    try {
+      window.speechSynthesis.speak(u);
+    } catch(e) {
+      done();
     }
   }
 
-  function speakArabic(text, callback) {
+  async function speakArabic(text, callback) {
+    setBadgeState(true);
+
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
-    if (window.currentAudio) {
-      window.currentAudio.pause();
-      window.currentAudio = null;
-    }
 
-    if ('speechSynthesis' in window) {
-      loadVoices();
-    }
+    var audioUrl = await fetchGeminiTTS(text);
 
-    // Gunakan enjin SpeechSynthesis jika ada suara Arab, jika laptop tiada suara Arab -> automatik guna Online Audio TTS
-    if ('speechSynthesis' in window && arVoice) {
-      var u = new SpeechSynthesisUtterance(text);
-      u.voice = arVoice;
-      u.lang = arVoice.lang || 'ar-SA';
-      u.rate = 0.75; // Kelajuan 0.75 optimum untuk elak distortion/sengau di laptop Windows/Mac
-      u.pitch = 1.0;
+    if (audioUrl) {
+      var audio = new Audio(audioUrl);
+      currentAudio = audio;
+      audio.playbackRate = 0.95;
 
       var finished = false;
       function done() {
         if (!finished) {
           finished = true;
+          setBadgeState(false);
           if (callback) callback();
         }
       }
 
-      u.onend = done;
-      u.onerror = function() {
-        playOnlineTTS(text, callback);
-      };
+      audio.onended = done;
+      audio.onerror = function() { fallbackSpeechSynthesis(text, callback); };
 
-      try {
-        window.speechSynthesis.speak(u);
-      } catch(e) {
-        playOnlineTTS(text, callback);
+      var p = audio.play();
+      if (p !== undefined) {
+        p.catch(function() { fallbackSpeechSynthesis(text, callback); });
       }
     } else {
-      playOnlineTTS(text, callback);
+      fallbackSpeechSynthesis(text, callback);
     }
   }
 
@@ -377,7 +510,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
     });
   }
 
-  // Navigasi Tab
   var tabs = ['belajar', 'makhraj', 'beza', 'main', 'kuiz'];
   function showTab(name) {
     tabs.forEach(function (t) {
@@ -388,7 +520,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
   }
   tabs.forEach(function (t) { $('t-' + t).addEventListener('click', function () { showTab(t); }); });
 
-  // Langkah 1: Kenali Fathah
   var cur = 0, withF = false;
   function renderStage() {
     var l = L[cur];
@@ -421,7 +552,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
   $('btnHear').addEventListener('click', function () { playAudio(cur, withF); });
   renderStage();
 
-  // Makhraj Huruf Tepat
   var MK = [
     { x: 287, y: 320, gx: 488, gy: 336, line: false, zone: 3, where: 'Pangkal Kerongkong (أقصى الحلق)',
       how: 'Bunyi keluar dari bahagian paling bawah kerongkong dekat pita suara.',
@@ -498,7 +628,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
   });
   renderMk();
 
-  // Langkah 2: Pembezaan Huruf
   var PAIRS = [[2, 3], [4, 5]];
   var pair = 0;
   function dotsHtml(l) {
@@ -532,7 +661,6 @@ nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, min
   });
   renderPair();
 
-  // Permainan & Kuiz
   function shuffle(a) {
     a = a.slice();
     for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
