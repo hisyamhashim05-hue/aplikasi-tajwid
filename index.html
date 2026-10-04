@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hijaiyah Berbaris Fathah - Sebutan Tepat Tahun 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Lexend:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #F2F6F4;
+  --surface: #FFFFFF;
+  --fg: #14262B;
+  --muted: #4C6469;
+  --line: #CBD9D6;
+  --accent: #0F6B6B;
+  --accent-fg: #FFFFFF;
+  --accent-soft: #DCEEEB;
+  --gold: #B9770E;
+  --good: #1B7F4B;
+  --bad: #B3361F;
+  --good-bg: #DDF2E6;
+  --bad-bg: #F9E0DA;
+  --tissue: #E8C1B5;
+  --tongue: #E08A80;
+  --lip: #D66356;
+  --tooth: #FFFFFF;
+  --font-ui: 'Lexend', system-ui, -apple-system, sans-serif;
+  --font-ar: 'Amiri', 'Traditional Arabic', serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1A1D; --surface: #14272B; --fg: #E5F0EE; --muted: #9BB5B1; --line: #28423F;
+    --accent: #4FC3B8; --accent-fg: #07201E; --accent-soft: #173A3A; --gold: #E8B64A;
+    --good: #5BD08C; --bad: #FF8D78; --good-bg: #123826; --bad-bg: #3F1D17;
+    --tissue: #5E433E; --tongue: #A5605A; --lip: #B5524A; --tooth: #EDE9E2;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-ui); font-size: 16px; line-height: 1.5;
+  padding-block: 20px 40px; padding-inline: 16px;
+}
+.wrap { max-width: 880px; margin-inline: auto; display: grid; gap: 18px; }
+.ar { font-family: var(--font-ar); direction: rtl; unicode-bidi: isolate; line-height: 1.7; }
+.mark { color: var(--gold); }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+header h1 { margin: 0; font-size: clamp(1.4rem, 4.5vw, 2rem); font-weight: 600; }
+header p { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+.crest { font-family: var(--font-ar); font-size: 3.2rem; line-height: 1.6; color: var(--accent); }
+
+nav[role="tablist"] { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 8px; }
+.tab {
+  font: inherit; text-align: left; cursor: pointer; padding: 10px 12px; border-radius: 10px;
+  background: var(--surface); color: var(--fg); border: 1.5px solid var(--line);
+  display: grid; gap: 2px; min-width: 0;
+}
+.tab b { font-weight: 600; font-size: .95rem; }
+.tab small { color: var(--muted); font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+.tab[aria-selected="true"] small { color: inherit; opacity: .85; }
+
+.panel { display: grid; gap: 16px; }
+.card { background: var(--surface); border: 1.5px solid var(--line); border-radius: 16px; padding: 18px; min-width: 0; }
+.stage { display: grid; justify-items: center; gap: 6px; text-align: center; }
+.big { font-size: clamp(7rem, 30vw, 12rem); line-height: 1.5; color: var(--fg); }
+.sound { font-size: 1.5rem; font-weight: 600; }
+.sound span { color: var(--accent); }
+.hint { color: var(--muted); max-width: 46ch; margin: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.btn {
+  font: inherit; font-weight: 500; cursor: pointer; border-radius: 10px; padding: 11px 18px;
+  border: 1.5px solid var(--accent); background: var(--surface); color: var(--accent);
+  transition: all 0.2s ease;
+}
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--accent-fg); }
+.btn:disabled { opacity: .5; cursor: default; }
+
+.picker { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 480px) { .picker { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pick {
+  font-family: var(--font-ar); font-size: 2.6rem; line-height: 1.6; cursor: pointer; border-radius: 12px;
+  background: var(--surface); color: var(--fg); border: 1.5px solid var(--line); padding: 2px 0;
+}
+.pick[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.pick small { display: block; font-family: var(--font-ui); font-size: .75rem; color: var(--muted); line-height: 1.2; padding-bottom: 6px; }
+
+.pairs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 520px) { .duo { grid-template-columns: 1fr; } }
+.duo .big { font-size: clamp(6rem, 22vw, 9rem); }
+.dots { display: flex; gap: 8px; align-items: center; min-height: 22px; color: var(--accent); font-weight: 500; }
+.dot { width: 16px; height: 16px; border-radius: 50%; background: var(--gold); }
+.tip { margin: 0; color: var(--muted); font-size: .95rem; }
+
+.progress { height: 8px; border-radius: 99px; background: var(--accent-soft); overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s; }
+.qmeta { display: flex; justify-content: space-between; color: var(--muted); font-size: .9rem; }
+.prompt { font-size: clamp(1.15rem, 3.6vw, 1.5rem); font-weight: 500; text-align: center; margin: 6px 0; }
+.opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.opts.letters { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 520px) { .opts.letters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .opts:not(.letters) { grid-template-columns: 1fr; } }
+.opt {
+  font: inherit; font-size: 1.05rem; cursor: pointer; padding: 14px 10px; border-radius: 12px; min-width: 0;
+  background: var(--surface); color: var(--fg); border: 1.5px solid var(--line);
+}
+.opt .ar { font-size: 3.4rem; line-height: 1.5; display: block; }
+.opt.ok { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+.opt.no { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+.feedback { min-height: 1.6em; text-align: center; font-weight: 500; }
+.feedback.ok { color: var(--good); }
+.feedback.no { color: var(--bad); }
+.result { text-align: center; display: grid; gap: 10px; justify-items: center; padding-block: 8px; }
+.score { font-size: 3rem; font-weight: 600; color: var(--accent); }
+#note { min-height: 1.4em; text-align: center; color: var(--muted); font-size: .9rem; }
+.fine { margin: 0; color: var(--muted); font-size: .85rem; text-align: center; }
+
+.diagram svg { width: 100%; height: auto; display: block; max-width: 100%; }
+.diagram .head, .diagram .back { fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.diagram .tissue { fill: var(--tissue); }
+.diagram .tongue { fill: var(--tongue); }
+.diagram .lip { fill: var(--lip); }
+.diagram .tooth { fill: var(--tooth); stroke: var(--muted); stroke-width: 1.5; }
+.diagram .palate { fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; }
+.diagram .zone { fill: var(--tissue); stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.diagram .zone.on { fill: var(--gold); fill-opacity: .4; }
+.diagram .lbl { font: 500 11px var(--font-ui); fill: var(--muted); }
+.diagram .lbl.on { fill: var(--fg); font-weight: 600; }
+.diagram .mk { cursor: pointer; }
+.diagram .mk .d { fill: var(--accent); stroke: var(--surface); stroke-width: 2; transition: all 0.3s; }
+.diagram .mk.sel .d { fill: var(--gold); r: 8; }
+.diagram .hit { fill: transparent; }
+.diagram .ring { fill: none; stroke: var(--gold); stroke-width: 2.5; transform-box: fill-box; transform-origin: center; animation: pulse 1.4s ease-out infinite; }
+.diagram #mkLine { stroke: var(--gold); stroke-width: 2; stroke-dasharray: 4 3; }
+.diagram .glyph { font-family: var(--font-ar); font-size: 44px; fill: var(--fg); direction: rtl; }
+.diagram .glyph .mark { fill: var(--gold); }
+@keyframes pulse { 0% { transform: scale(.6); opacity: 1; } 100% { transform: scale(1.9); opacity: 0; } }
+.infohead { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.infohead .gl { font-size: 5.2rem; line-height: 1.5; }
+.infohead .where { font-size: 1.1rem; }
+.infohead .where b { color: var(--accent); }
+.info p { margin: 10px 0 0; }
+.same { display: inline-flex; gap: 8px; align-items: center; }
+.same .ar { font-size: 2rem; line-height: 1.4; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Hijaiyah Berbaris Fathah</h1>
+      <p>Tilawah Tahun 1 · Huruf ا ب ت ث ج ح</p>
+    </div>
+    <div class="crest ar" aria-hidden="true">فَتْحَة</div>
+  </header>
+
+  <nav role="tablist" aria-label="Bahagian pelajaran">
+    <button class="tab" role="tab" id="t-belajar" aria-selected="true" aria-controls="s-belajar"><small>Langkah 1</small><b>Kenali fathah</b></button>
+    <button class="tab" role="tab" id="t-makhraj" aria-selected="false" aria-controls="s-makhraj"><small>Makhraj</small><b>Tempat keluar</b></button>
+    <button class="tab" role="tab" id="t-beza" aria-selected="false" aria-controls="s-beza"><small>Langkah 2</small><b>Beza bunyi</b></button>
+    <button class="tab" role="tab" id="t-main" aria-selected="false" aria-controls="s-main"><small>Permainan</small><b>Dengar &amp; pilih</b></button>
+    <button class="tab" role="tab" id="t-kuiz" aria-selected="false" aria-controls="s-kuiz"><small>Penutup</small><b>Kuiz akhir</b></button>
+  </nav>
+
+  <section class="panel" id="s-belajar" role="tabpanel" aria-labelledby="t-belajar">
+    <div class="card stage">
+      <div class="big ar" id="stageLetter" aria-live="polite"></div>
+      <div class="sound" id="stageSound"></div>
+      <p class="hint" id="stageHint"></p>
+      <div class="row">
+        <button class="btn primary" id="btnFathah" aria-pressed="false">Letak fathah</button>
+        <button class="btn" id="btnHear">🔊 Dengar Sebutan</button>
+      </div>
+    </div>
+    <div class="picker" id="picker" aria-label="Pilih huruf"></div>
+    <div class="card">
+      <p class="hint" style="max-width:none">Bila <b>tanpa fathah</b>, huruf dibaca mengikut nama asalnya (contoh: <i>Aliff, Baaa, Taaa</i>). Bila <b>diletakkan fathah</b>, sebutannya bertukar menjadi bunyi baris di atas (contoh: <i>Aaa, Baa, Taa</i>).</p>
+    </div>
+  </section>
+
+  <section class="panel" id="s-makhraj" role="tabpanel" aria-labelledby="t-makhraj" hidden>
+    <div class="picker" id="mkPick" aria-label="Pilih huruf"></div>
+    <div class="card diagram">
+      <svg id="mouth" viewBox="0 0 540 380" role="group" aria-label="Rajah keratan rentas mulut dan kerongkong">
+        <path class="head" d="M214 18 C132 18 92 66 92 122 C92 146 80 158 68 176 L40 200 C35 206 41 211 49 211 L58 211 L58 262 C60 276 70 288 84 296 L98 338 L172 352"/>
+        <path class="back" d="M304 120 L304 352"/>
+        <path class="tissue" d="M88 214 C130 186 204 180 258 202 L258 130 L120 130 L92 178 Z"/>
+        <path class="tongue" d="M82 242 C105 235 150 220 200 230 C238 236 258 252 266 280 L266 338 L146 338 C116 316 98 292 82 242 Z"/>
+        <path class="palate" d="M88 214 C130 186 204 180 258 202 C276 204 290 216 288 244"/>
+        <rect class="zone" id="z1" x="270" y="220" width="34" height="35"/>
+        <rect class="zone" id="z2" x="270" y="255" width="34" height="40"/>
+        <rect class="zone" id="z3" x="270" y="295" width="34" height="45"/>
+        <rect class="tooth" x="78" y="215" width="8" height="22" rx="2"/>
+        <rect class="tooth" x="78" y="243" width="8" height="20" rx="2"/>
+        <ellipse class="lip" cx="66" cy="223" rx="10" ry="7"/>
+        <ellipse class="lip" cx="66" cy="249" rx="10" ry="8"/>
+        
+        <text class="lbl" x="12" y="238">Bibir</text>
+        <text class="lbl" x="145" y="165">Lelangit keras</text>
+        <text class="lbl" x="155" y="285">Lidah</text>
+        <text class="lbl" id="l1" x="312" y="240">Hujung kerongkong</text>
+        <text class="lbl" id="l2" x="312" y="278">Tengah kerongkong</text>
+        <text class="lbl" id="l3" x="312" y="320">Pangkal kerongkong</text>
+        
+        <line id="mkLine" x1="0" y1="0" x2="0" y2="0"/>
+        <text class="glyph" id="mkGlyph" x="0" y="0" text-anchor="middle"></text>
+        <circle class="ring" id="mkRing" cx="0" cy="0" r="11"/>
+        <g id="mkDots"></g>
+      </svg>
+    </div>
+    <div class="card info" id="mkInfo" aria-live="polite"></div>
+  </section>
+
+  <section class="panel" id="s-beza" role="tabpanel" aria-labelledby="t-beza" hidden>
+    <div class="pairs" id="pairBtns"></div>
+    <div class="duo" id="duo"></div>
+    <div class="row"><button class="btn primary" id="btnBoth">🔊 Dengar kedua-duanya</button></div>
+  </section>
+
+  <section class="panel" id="s-main" role="tabpanel" aria-labelledby="t-main" hidden>
+    <div class="card" id="gameRoot"></div>
+  </section>
+
+  <section class="panel" id="s-kuiz" role="tabpanel" aria-labelledby="t-kuiz" hidden>
+    <div class="card" id="quizRoot"></div>
+  </section>
+
+  <p class="fine">Sebutan tajwid tepat dengan penekanan pada pemanjangan sebutan murid Tahun 1.</p>
+  <div id="note" role="status"></div>
+</div>
+
+<script>
+(function () {
+  var FATHAH = 'َ';
+  
+  // Data Sebutan Tepat & Dipanjangkan Mengikut Garis Panduan Tajwid (Alif Fathah diperbetulkan kepada أَ)
+  var L = [
+    { 
+      base0: 'ا', baseF: 'أ', name: 'alif', snd: 'a',
+      arNameLong: 'أَلِيفْ',       // Sebutan Nama Dipanjangkan: Aliff...
+      arFathahLong: 'أَ',          // Diubah kepada أ (Alif Fathah tunggal/jelas) untuk mengelakkan bunyi pelik teks panjang "آا"
+      tip: 'Garis lurus, tiada titik. Tanpa fathah dibaca "Aliff". Dengan fathah dibaca "Aaa".'
+    },
+    { 
+      base0: 'ب', baseF: 'ب', name: 'ba', snd: 'ba',
+      arNameLong: 'بَاءْ',          // Sebutan Nama Dipanjangkan: Baaa...
+      arFathahLong: 'بَا',          // Sebutan Baris Dipanjangkan: Baa...
+      tip: 'Satu titik di bawah. Tanpa fathah dibaca "Baaa". Dengan fathah dibaca "Baa".'
+    },
+    { 
+      base0: 'ت', baseF: 'ت', name: 'ta', snd: 'ta',
+      arNameLong: 'تَاءْ',          // Sebutan Nama Dipanjangkan: Taaa...
+      arFathahLong: 'تَا',          // Sebutan Baris Dipanjangkan: Taa...
+      tip: 'Dua titik di atas. Tanpa fathah dibaca "Taaa". Dengan fathah dibaca "Taa".', dots: 2, pos: 'atas'
+    },
+    { 
+      base0: 'ث', baseF: 'ث', name: 'tha', snd: 'tha',
+      arNameLong: 'ثَاءْ',          // Sebutan Nama Dipanjangkan: Thaaa...
+      arFathahLong: 'ثَا',          // Sebutan Baris Dipanjangkan: Thaa...
+      tip: 'Tiga titik di atas. Tanpa fathah dibaca "Thaaa". Dengan fathah dibaca "Thaa".', dots: 3, pos: 'atas'
+    },
+    { 
+      base0: 'ج', baseF: 'ج', name: 'jim', snd: 'ja',
+      arNameLong: 'جِيمْ',          // Sebutan Nama Dipanjangkan: Jiim...
+      arFathahLong: 'جَا',          // Sebutan Baris Dipanjangkan: Jaa...
+      tip: 'Satu titik di bawah. Tanpa fathah dibaca "Jiim". Dengan fathah dibaca "Jaa".', dots: 1, pos: 'bawah'
+    },
+    { 
+      base0: 'ح', baseF: 'ح', name: 'ha', snd: 'ha',
+      arNameLong: 'حَاءْ',          // Sebutan Nama Dipanjangkan: Haaa...
+      arFathahLong: 'حَا',          // Sebutan Baris Dipanjangkan: Haa...
+      tip: 'Tiada titik. Tanpa fathah dibaca "Haaa". Dengan fathah dibaca "Haa".', dots: 0, pos: ''
+    }
+  ];
+
+  function F(i) { return L[i].baseF + FATHAH; }
+  function arSpan(i) { return '<span class="ar">' + L[i].baseF + '<span class="mark">' + FATHAH + '</span></span>'; }
+  function $(id) { return document.getElementById(id); }
+
+  // Enjin Sebutan Tepat & Seragam (Laptop + Telefon 100% Sama)
+  var arVoice = null;
+
+  function loadVoices() {
+    if (!('speechSynthesis' in window)) return;
+    var voices = window.speechSynthesis.getVoices();
+    // Cari suara Arab khusus dalam sistem
+    arVoice = voices.find(function(v) {
+      return v.lang && (v.lang === 'ar-SA' || v.lang.startsWith('ar') || v.lang.includes('ar_'));
+    }) || voices.find(function(v) {
+      return v.name && (v.name.toLowerCase().includes('arabic') || v.name.includes('العربية'));
+    });
+  }
+
+  if ('speechSynthesis' in window) {
+    loadVoices();
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  }
+
+  function playOnlineTTS(text, callback) {
+    try {
+      var url = 'https://translate.google.com/translate_tts?ie=UTF-8&q=' + encodeURIComponent(text) + '&tl=ar&client=tw-ob';
+      var audio = new Audio(url);
+      window.currentAudio = audio;
+      audio.playbackRate = 0.85;
+      audio.onended = function() { if (callback) callback(); };
+      audio.onerror = function() { if (callback) callback(); };
+      audio.play().catch(function() { if (callback) callback(); });
+    } catch(e) {
+      if (callback) callback();
+    }
+  }
+
+  function speakArabic(text, callback) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (window.currentAudio) {
+      window.currentAudio.pause();
+      window.currentAudio = null;
+    }
+
+    if ('speechSynthesis' in window) {
+      loadVoices();
+    }
+
+    // Gunakan enjin SpeechSynthesis jika ada suara Arab, jika laptop tiada suara Arab -> automatik guna Online Audio TTS
+    if ('speechSynthesis' in window && arVoice) {
+      var u = new SpeechSynthesisUtterance(text);
+      u.voice = arVoice;
+      u.lang = arVoice.lang || 'ar-SA';
+      u.rate = 0.75; // Kelajuan 0.75 optimum untuk elak distortion/sengau di laptop Windows/Mac
+      u.pitch = 1.0;
+
+      var finished = false;
+      function done() {
+        if (!finished) {
+          finished = true;
+          if (callback) callback();
+        }
+      }
+
+      u.onend = done;
+      u.onerror = function() {
+        playOnlineTTS(text, callback);
+      };
+
+      try {
+        window.speechSynthesis.speak(u);
+      } catch(e) {
+        playOnlineTTS(text, callback);
+      }
+    } else {
+      playOnlineTTS(text, callback);
+    }
+  }
+
+  function playAudio(i, isWithFathah, callback) {
+    var l = L[i];
+    var textToSpeak = isWithFathah ? l.arFathahLong : l.arNameLong;
+    speakArabic(textToSpeak, callback);
+  }
+
+  function playSequence(indices) {
+    if (indices.length === 0) return;
+    var idx = indices.shift();
+    playAudio(idx, true, function() {
+      setTimeout(function(){ playSequence(indices); }, 400);
+    });
+  }
+
+  // Navigasi Tab
+  var tabs = ['belajar', 'makhraj', 'beza', 'main', 'kuiz'];
+  function showTab(name) {
+    tabs.forEach(function (t) {
+      var on = t === name;
+      $('t-' + t).setAttribute('aria-selected', on ? 'true' : 'false');
+      $('s-' + t).hidden = !on;
+    });
+  }
+  tabs.forEach(function (t) { $('t-' + t).addEventListener('click', function () { showTab(t); }); });
+
+  // Langkah 1: Kenali Fathah
+  var cur = 0, withF = false;
+  function renderStage() {
+    var l = L[cur];
+    $('stageLetter').innerHTML = withF
+      ? l.baseF + '<span class="mark">' + FATHAH + '</span>'
+      : l.base0;
+    $('stageSound').innerHTML = withF
+      ? 'Dibaca: <span>' + l.snd + '... (panjangkan)' + '</span>'
+      : 'Nama huruf: <span>' + l.name + '... (panjangkan)' + '</span>';
+    $('stageHint').textContent = l.tip;
+    var b = $('btnFathah');
+    b.setAttribute('aria-pressed', withF ? 'true' : 'false');
+    b.textContent = withF ? 'Buang fathah' : 'Letak fathah';
+    Array.prototype.forEach.call($('picker').children, function (btn, i) {
+      btn.setAttribute('aria-pressed', i === cur ? 'true' : 'false');
+    });
+  }
+  $('picker').innerHTML = L.map(function (l, i) {
+    return '<button class="pick" data-i="' + i + '" aria-pressed="false" aria-label="Huruf ' + l.name + '">' + l.base0 + '<small>' + l.name + '</small></button>';
+  }).join('');
+  $('picker').addEventListener('click', function (e) {
+    var b = e.target.closest('.pick'); if (!b) return;
+    cur = +b.getAttribute('data-i'); renderStage(); playAudio(cur, withF);
+  });
+  $('btnFathah').addEventListener('click', function () { 
+    withF = !withF; 
+    renderStage(); 
+    playAudio(cur, withF); 
+  });
+  $('btnHear').addEventListener('click', function () { playAudio(cur, withF); });
+  renderStage();
+
+  // Makhraj Huruf Tepat
+  var MK = [
+    { x: 287, y: 320, gx: 488, gy: 336, line: false, zone: 3, where: 'Pangkal Kerongkong (أقصى الحلق)',
+      how: 'Bunyi keluar dari bahagian paling bawah kerongkong dekat pita suara.',
+      same: ['ه'] },
+    { x: 66, y: 236, gx: 34, gy: 330, line: true, where: 'Dua Bibir Rapat (الشفتان)',
+      how: 'Bahagian basah bibir atas dan bawah dirapatkan rapat kemudian dilepaskan.',
+      same: ['م', 'و'] },
+    { x: 86, y: 220, gx: 40, gy: 150, line: true, where: 'Hujung Lidah & Pangkal Gigi Seri Atas',
+      how: 'Hujung lidah ditempelkan pada gusi / pangkal dua gigi seri atas.',
+      same: ['د', 'ط'] },
+    { x: 74, y: 233, gx: 40, gy: 372, line: true, where: 'Hujung Lidah & Hujung Gigi Seri Atas',
+      how: 'Hujung lidah dikeluarkan sedikit menyentuh hujung gigi seri atas.',
+      same: ['ذ', 'ظ'] },
+    { x: 175, y: 218, gx: 150, gy: 118, line: true, where: 'Tengah Lidah & Lelangit Keras',
+      how: 'Tengah permukaan lidah diangkat menyentuh lelangit keras di atasnya.',
+      same: ['ش', 'ي'] },
+    { x: 287, y: 275, gx: 488, gy: 302, line: false, zone: 2, where: 'Tengah Kerongkong (وسط الحلق)',
+      how: 'Bunyi "ha" bersih keluar dari bahagian tengah kerongkong.',
+      same: ['ع'] }
+  ];
+  
+  var mkSel = 0;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  (function buildMk() {
+    $('mkPick').innerHTML = L.map(function (l, i) {
+      return '<button class="pick" data-i="' + i + '" aria-pressed="false" aria-label="Huruf ' + l.name + '">' +
+        l.baseF + '<span class="mark">' + FATHAH + '</span><small>' + l.snd + '</small></button>';
+    }).join('');
+    var g = $('mkDots');
+    MK.forEach(function (m, i) {
+      var n = document.createElementNS(SVGNS, 'g');
+      n.setAttribute('class', 'mk'); n.setAttribute('data-i', i);
+      n.setAttribute('tabindex', '0'); n.setAttribute('role', 'button');
+      n.innerHTML = '<circle class="hit" cx="' + m.x + '" cy="' + m.y + '" r="12"/><circle class="d" cx="' + m.x + '" cy="' + m.y + '" r="6"/>';
+      g.appendChild(n);
+    });
+  })();
+
+  function renderMk() {
+    var m = MK[mkSel], l = L[mkSel];
+    Array.prototype.forEach.call($('mkPick').children, function (b, i) { b.setAttribute('aria-pressed', i === mkSel ? 'true' : 'false'); });
+    Array.prototype.forEach.call($('mkDots').children, function (n, i) { n.setAttribute('class', 'mk' + (i === mkSel ? ' sel' : '')); });
+    var ring = $('mkRing'); ring.setAttribute('cx', m.x); ring.setAttribute('cy', m.y);
+    var line = $('mkLine');
+    if (m.line) {
+      line.setAttribute('x1', m.x); line.setAttribute('y1', m.y);
+      line.setAttribute('x2', m.gx + (m.gx < m.x ? 16 : 0)); line.setAttribute('y2', m.gy - 14);
+      line.style.display = '';
+    } else { line.style.display = 'none'; }
+    var gl = $('mkGlyph'); gl.setAttribute('x', m.gx); gl.setAttribute('y', m.gy);
+    gl.innerHTML = l.baseF + '<tspan class="mark">' + FATHAH + '</tspan>';
+    [1, 2, 3].forEach(function (z) {
+      $('z' + z).setAttribute('class', 'zone' + (m.zone === z ? ' on' : ''));
+      $('l' + z).setAttribute('class', 'lbl' + (m.zone === z ? ' on' : ''));
+    });
+    $('mkInfo').innerHTML =
+      '<div class="infohead"><div class="gl ar">' + l.baseF + '<span class="mark">' + FATHAH + '</span></div><div>' +
+      '<div class="sound">Sebutan: <span>' + l.snd + '...</span></div>' +
+      '<div class="where">Tempat keluar: <b>' + m.where + '</b></div></div></div>' +
+      '<p>' + m.how + '</p>' +
+      '<div class="row" style="justify-content:flex-start;margin-top:12px"><button class="btn primary" id="mkHear">🔊 Dengar Sebutan</button></div>';
+  }
+  
+  $('mkPick').addEventListener('click', function (e) {
+    var b = e.target.closest('.pick'); if (!b) return;
+    mkSel = +b.getAttribute('data-i'); renderMk(); playAudio(mkSel, true);
+  });
+  $('mkDots').addEventListener('click', function (e) {
+    var n = e.target.closest('.mk'); if (!n) return;
+    mkSel = +n.getAttribute('data-i'); renderMk(); playAudio(mkSel, true);
+  });
+  $('mkInfo').addEventListener('click', function (e) {
+    if (e.target.closest('#mkHear')) playAudio(mkSel, true);
+  });
+  renderMk();
+
+  // Langkah 2: Pembezaan Huruf
+  var PAIRS = [[2, 3], [4, 5]];
+  var pair = 0;
+  function dotsHtml(l) {
+    if (!l.dots) return '<div class="dots">Tiada titik</div>';
+    var d = ''; for (var k = 0; k < l.dots; k++) d += '<span class="dot"></span>';
+    return '<div class="dots">' + d + '<span>' + l.dots + ' titik ' + l.pos + '</span></div>';
+  }
+  function renderPair() {
+    $('pairBtns').innerHTML = PAIRS.map(function (p, k) {
+      return '<button class="btn" data-k="' + k + '" aria-pressed="' + (k === pair) + '">' +
+        '<span class="ar" style="font-size:1.6rem">' + L[p[0]].base0 + '</span> dan <span class="ar" style="font-size:1.6rem">' + L[p[1]].base0 + '</span></button>';
+    }).join('');
+    $('duo').innerHTML = PAIRS[pair].map(function (i) {
+      return '<div class="card stage">' + dotsHtml(L[i]) +
+        '<div class="big ar">' + L[i].baseF + '<span class="mark">' + FATHAH + '</span></div>' +
+        '<div class="sound">Dibaca: <span>' + L[i].snd + '...</span></div>' +
+        '<p class="tip">' + L[i].tip + '</p>' +
+        '<button class="btn" data-hear="' + i + '">🔊 Dengar Sebutan</button></div>';
+    }).join('');
+  }
+  $('pairBtns').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    pair = +b.getAttribute('data-k'); renderPair();
+  });
+  $('duo').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-hear]'); if (!b) return;
+    playAudio(+b.getAttribute('data-hear'), true);
+  });
+  $('btnBoth').addEventListener('click', function () {
+    var p = PAIRS[pair]; playSequence([p[0], p[1]]);
+  });
+  renderPair();
+
+  // Permainan & Kuiz
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function Quiz(root, makeQs) {
+    var qs, i, score, done;
+    function start() { qs = makeQs(); i = 0; score = 0; show(); }
+    function show() {
+      if (i >= qs.length) return finish();
+      var q = qs[i]; done = false;
+      root.innerHTML =
+        '<div class="qmeta"><span>Soalan ' + (i + 1) + ' / ' + qs.length + '</span><span>Skor ' + score + '</span></div>' +
+        '<div class="progress" aria-hidden="true"><i style="width:' + (i / qs.length * 100) + '%"></i></div>' +
+        '<p class="prompt">' + q.prompt + '</p>' +
+        (q.sayIdx !== undefined ? '<div class="row"><button class="btn" data-say="' + q.sayIdx + '">🔊 Dengar Sebutan</button></div>' : '') +
+        '<div class="opts' + (q.letters ? ' letters' : '') + '" style="margin-top:14px">' +
+        q.opts.map(function (o, k) { return '<button class="opt" data-k="' + k + '">' + o.html + '</button>'; }).join('') + '</div>' +
+        '<div class="feedback" role="status" style="margin-top:12px"></div>' +
+        '<div class="row"><button class="btn primary" data-next="1" hidden>' + (i === qs.length - 1 ? 'Lihat skor' : 'Seterusnya') + '</button></div>';
+    }
+    function finish() {
+      var r = score / qs.length;
+      var msg = r >= 0.8 ? 'Hebat! Sebutan kamu sangat tepat!' : 'Bagus! Teruskan latihan untuk sebutan yang betul.';
+      root.innerHTML = '<div class="result"><div class="score">' + score + ' / ' + qs.length + '</div><p class="prompt">' + msg + '</p>' +
+        '<button class="btn primary" data-again="1">Main semula</button></div>';
+    }
+    root.addEventListener('click', function (e) {
+      var q = qs && qs[i];
+      if (e.target.closest('[data-again]')) { start(); return; }
+      if (e.target.closest('[data-say]') && q) { playAudio(q.sayIdx, true); return; }
+      if (e.target.closest('[data-next]')) { i++; show(); return; }
+      var b = e.target.closest('.opt');
+      if (!b || done || !q) return;
+      done = true;
+      var k = +b.getAttribute('data-k');
+      var all = root.querySelectorAll('.opt');
+      var fb = root.querySelector('.feedback');
+      if (q.opts[k].ok) { score++; b.classList.add('ok'); fb.className = 'feedback ok'; fb.textContent = 'Betul!'; }
+      else {
+        b.classList.add('no');
+        q.opts.forEach(function (o, n) { if (o.ok) all[n].classList.add('ok'); });
+        fb.className = 'feedback no'; fb.textContent = q.why || 'Belum tepat. Lihat jawapan yang betul.';
+      }
+      Array.prototype.forEach.call(all, function (x) { x.disabled = true; });
+      root.querySelector('[data-next]').hidden = false;
+      root.querySelector('.qmeta span:last-child').textContent = 'Skor ' + score;
+    });
+    start();
+  }
+
+  Quiz($('gameRoot'), function () {
+    var out = [];
+    for (var n = 0; n < 6; n++) {
+      var t = Math.floor(Math.random() * L.length);
+      var others = shuffle(L.map(function (_, k) { return k; }).filter(function (k) { return k !== t; })).slice(0, 3);
+      var opts = shuffle([t].concat(others)).map(function (k) { return { html: arSpan(k), ok: k === t }; });
+      out.push({ prompt: 'Pilih huruf yang berbunyi “' + L[t].snd + '”', sayIdx: t, letters: true, opts: opts,
+                 why: 'Jawapan yang betul ialah huruf yang bertanda hijau.' });
+    }
+    return out;
+  });
+
+  Quiz($('quizRoot'), function () {
+    return [
+      { prompt: 'Tanda kecil di atas huruf yang memberi bunyi “a” ialah…',
+        opts: [{ html: 'Fathah', ok: true }, { html: 'Kasrah' }, { html: 'Dammah' }],
+        why: 'Tanda di atas huruf tersebut ialah Fathah.' },
+      { prompt: 'Huruf manakah berbunyi “tha” (ثَ)?', sayIdx: 3, letters: true,
+        opts: shuffle([2, 3, 4, 5]).map(function (k) { return { html: arSpan(k), ok: k === 3 }; }),
+        why: 'Bunyi “tha” ialah ثَ.' },
+      { prompt: 'Apakah makhraj bagi huruf ب (Ba)?',
+        opts: shuffle([[{html:'Dua Bibir',ok:true}], [{html:'Tengah Kerongkong'}], [{html:'Pangkal Lidah'}]]).map(function(x){return x[0];}),
+        why: 'Makhraj huruf Ba ialah pertemuan dua bibir.' }
+    ];
+  });
+})();
+</script>
+</body>
+</html>
